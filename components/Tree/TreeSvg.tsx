@@ -9,7 +9,7 @@ import {
   renderSizeFor,
   type AllocState,
 } from "@/lib/tree/svgUtils";
-import { ALL_CLASS_NAMES, getClassStartNode } from "@/lib/tree/pathing";
+import { ALL_CLASS_NAMES, getClassStartNode, POE2_CLASS_INDICES } from "@/lib/tree/pathing";
 import type { AdjacencyMap, TreeData, TreeJump } from "@/lib/tree/types";
 
 const PORTRAIT_SIZE = 3000;
@@ -23,7 +23,7 @@ function ClassPortrait({
 }) {
   const className = ALL_CLASS_NAMES[classIdx];
   if (!className) return null;
-  if (classIdx < 6 || classIdx > 11) return null;
+  if (!POE2_CLASS_INDICES.includes(classIdx)) return null;
   const slug = className.toLowerCase();
   let slot = 0;
   if (ascendancyId) {
