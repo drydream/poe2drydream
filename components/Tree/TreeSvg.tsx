@@ -389,13 +389,39 @@ function HoverRing({
   ascendancyId: string | null;
 }) {
   const hovered = useStore((s) => s.hovered);
+  const iconIdMap = useMemo(() => makeIconIdMap(tree), [tree]);
   if (hovered == null) return null;
   const n = tree.nodes[String(hovered)];
   if (!n || n.x == null || n.y == null) return null;
   if ((n.asc ?? null) !== ascendancyId) return null;
-  const [fw, fh] = renderSizeFor(n, tree.atlas.frames.frames);
-  const r = Math.max(fw, fh) * 0.55;
-  return <circle cx={n.x} cy={n.y} r={r} className="hover-ring" />;
+  const frameIndex = tree.atlas.frames.frames;
+  const iconIndex = tree.atlas.skills.icons;
+  const [fw, fh] = renderSizeFor(n, frameIndex);
+  const fn = frameNameFor(n, "canAllocate");
+  const iconSid = n.icon && iconIndex[n.icon] ? iconIdMap.get(n.icon) : null;
+  const [iw, ih] = iconSizeFor(n, fw, fh);
+  return (
+    <g className="glow" pointerEvents="none">
+      {fn && frameIndex[fn] && (
+        <use
+          href={`#f-${fn}`}
+          x={n.x - fw / 2}
+          y={n.y - fh / 2}
+          width={fw}
+          height={fh}
+        />
+      )}
+      {iconSid && (
+        <use
+          href={`#${iconSid}`}
+          x={n.x - iw / 2}
+          y={n.y - ih / 2}
+          width={iw}
+          height={ih}
+        />
+      )}
+    </g>
+  );
 }
 
 type HitProps = {

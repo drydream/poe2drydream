@@ -144,6 +144,10 @@ body::after {
   stroke-width: 9;
   pointer-events: none;
 }
+.glow {
+  pointer-events: none;
+  filter: drop-shadow(0 0 22px var(--gold-bright)) brightness(1.15);
+}
 
 .startlabel {
   fill: var(--gold);
