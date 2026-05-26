@@ -41,3 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw poe2-skilltree-export drop (regenerated outputs in public/ are tracked)
+/poe2-skilltree-export-*/
