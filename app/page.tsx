@@ -8,6 +8,28 @@ import { Guide } from "@/components/Guide/Guide";
 import { loadTreeAll } from "@/lib/tree/loadTree";
 import { useStore } from "@/lib/store";
 
+function HoverDebug() {
+  const hovered = useStore((s) => s.hovered);
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: 8,
+        left: 8,
+        zIndex: 99,
+        background: "rgba(0,0,0,0.7)",
+        color: "#ffd98a",
+        font: "12px monospace",
+        padding: "4px 8px",
+        border: "1px solid #8a6a2a",
+        pointerEvents: "none",
+      }}
+    >
+      hover: {String(hovered)}
+    </div>
+  );
+}
+
 export default function Page() {
   const initialized = useRef(false);
   const hashSyncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -55,6 +77,7 @@ export default function Page() {
       <Sidebar />
       <Guide />
       <NodeTooltip />
+      <HoverDebug />
       {loading && (
         <div id="loading">
           <div>Forging the Atlas of Passives</div>
