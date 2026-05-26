@@ -15,8 +15,9 @@ export const ALL_CLASS_NAMES = [
   "Druid",
 ];
 
-// PoE2-only class indices into ALL_CLASS_NAMES (drop PoE1 legacy: Marauder, Witch, Ranger, Duelist, Shadow, Templar)
-export const POE2_CLASS_INDICES = [6, 7, 8, 9, 10, 11];
+// PoE2 class indices. Ranger (2) is the PoE1 ID that shares a start node with Huntress (8)
+// and carries the legacy Deadeye/Pathfinder ascendancies.
+export const POE2_CLASS_INDICES = [6, 7, 8, 2, 9, 10, 11];
 
 export const POE2_CLASS_NAMES = POE2_CLASS_INDICES.map(
   (i) => ALL_CLASS_NAMES[i],
