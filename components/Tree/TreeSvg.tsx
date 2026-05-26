@@ -71,6 +71,11 @@ const TreeDefs = memo(function TreeDefs({ tree }: { tree: TreeData }) {
   const frameIndex = tree.atlas.frames.frames;
   return (
     <defs>
+      <radialGradient id="hover-halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#ffd98a" stopOpacity="0.65" />
+        <stop offset="45%" stopColor="#ffd98a" stopOpacity="0.28" />
+        <stop offset="100%" stopColor="#ffd98a" stopOpacity="0" />
+      </radialGradient>
       <image
         id="atlas-skills"
         href="/atlas-skills.webp"
@@ -394,8 +399,13 @@ function HoverRing({
   if (!n || n.x == null || n.y == null) return null;
   if ((n.asc ?? null) !== ascendancyId) return null;
   const [fw, fh] = renderSizeFor(n, tree.atlas.frames.frames);
-  const r = Math.max(fw, fh) * 0.62;
-  return <circle cx={n.x} cy={n.y} r={r} className="hover-ring" />;
+  const m = Math.max(fw, fh);
+  return (
+    <g pointerEvents="none">
+      <circle cx={n.x} cy={n.y} r={m * 1.4} fill="url(#hover-halo)" />
+      <circle cx={n.x} cy={n.y} r={m * 0.62} className="hover-ring" />
+    </g>
+  );
 }
 
 type HitProps = {

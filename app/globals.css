@@ -143,11 +143,9 @@ body::after {
 .hover-ring {
   fill: none;
   stroke: var(--gold-bright);
-  stroke-width: 3;
-  opacity: 0.85;
+  stroke-width: 6;
+  opacity: 1;
   pointer-events: none;
-  filter: drop-shadow(0 0 12px var(--gold-bright))
-    drop-shadow(0 0 24px rgba(255, 217, 138, 0.55));
 }
 
 .startlabel {
