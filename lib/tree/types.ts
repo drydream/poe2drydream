@@ -56,7 +56,7 @@ export type TreeData = {
 };
 
 export type JumpClass = { name: string; x: number; y: number };
-export type JumpAscendancy = { name: string; x: number; y: number };
+export type JumpAscendancy = { id: string; name: string; x: number; y: number };
 
 export type TreeJump = {
   classes: JumpClass[];
