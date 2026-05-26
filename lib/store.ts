@@ -150,24 +150,25 @@ export const useStore = create<Store>((set, get) => ({
   },
 }));
 
+// Some PoE2 classes share their ascendancy ID prefix with the legacy PoE1 class name.
+const EXTRA_ASC_PREFIXES: Record<number, string[]> = {
+  8: ["Ranger"], // Huntress inherits Deadeye/Pathfinder under legacy "Ranger" prefix
+};
+
 export function ascendanciesForClass(
   tree: TreeData,
   classIdx: number,
 ): string[] {
   const set = new Set<string>();
   for (const n of Object.values(tree.nodes)) {
-    if (n.kind === "ascstart" && n.asc) {
-      // ascendancy IDs look like "Druid1", "Witch1" — first 1-2 chars are class prefix
-      // We can't reliably map without external knowledge, so include all and rely on class start adjacency
-      set.add(n.asc);
-    }
+    if (n.kind === "ascstart" && n.asc) set.add(n.asc);
   }
-  // Filter to ones whose name prefix corresponds to current class
   const className = CLASS_NAMES_BY_IDX[classIdx];
   if (!className) return Array.from(set);
-  return Array.from(set).filter((a) =>
-    a.toLowerCase().startsWith(className.toLowerCase()),
-  );
+  const prefixes = [className, ...(EXTRA_ASC_PREFIXES[classIdx] ?? [])];
+  return Array.from(set)
+    .filter((a) => prefixes.some((p) => a.toLowerCase().startsWith(p.toLowerCase())))
+    .sort();
 }
 
 const CLASS_NAMES_BY_IDX = [

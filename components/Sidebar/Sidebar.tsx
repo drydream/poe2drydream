@@ -72,7 +72,10 @@ export function Sidebar() {
     }
   };
 
+  const jump = useStore((s) => s.jump);
   const ascendancies = tree ? ascendanciesForClass(tree, classIdx) : [];
+  const ascName = (id: string) =>
+    jump?.ascendancies.find((a) => a.id === id)?.name ?? id;
 
   const KINDS_ORDER = [
     "classstart",
@@ -121,7 +124,7 @@ export function Sidebar() {
               <option value="">— None —</option>
               {ascendancies.map((a) => (
                 <option key={a} value={a}>
-                  {a}
+                  {ascName(a)}
                 </option>
               ))}
             </select>
