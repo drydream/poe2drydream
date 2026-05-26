@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { TreeSvg } from "@/components/Tree/TreeSvg";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { NodeTooltip } from "@/components/Tooltip/NodeTooltip";
+import { Guide } from "@/components/Guide/Guide";
 import { loadTreeAll } from "@/lib/tree/loadTree";
 import { useStore } from "@/lib/store";
 
@@ -52,6 +53,7 @@ export default function Page() {
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
       <TreeSvg />
       <Sidebar />
+      <Guide />
       <NodeTooltip />
       {loading && (
         <div id="loading">
