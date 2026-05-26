@@ -223,7 +223,6 @@ const TreeStatic = memo(function TreeStatic({
             y={n.y - ih / 2}
             width={iw}
             height={ih}
-            style={n.kind === "ascstart" ? undefined : { opacity: 0.6 }}
           />,
         );
       }
