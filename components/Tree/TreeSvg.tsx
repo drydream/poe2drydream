@@ -395,7 +395,7 @@ function HoverRing({
   if (!n || n.x == null || n.y == null) return null;
   if ((n.asc ?? null) !== ascendancyId) return null;
   const [fw, fh] = renderSizeFor(n, tree.atlas.frames.frames);
-  const r = Math.max(fw, fh) * 0.55;
+  const r = Math.max(fw, fh) * 0.62;
   return <circle cx={n.x} cy={n.y} r={r} className="hover-ring" />;
 }
 
