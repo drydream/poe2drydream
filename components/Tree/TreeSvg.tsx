@@ -155,9 +155,14 @@ const TreeStatic = memo(function TreeStatic({
     if (!visible(a) || !visible(b)) continue;
     const d = edgePath(tree, e);
     if (!d) continue;
-    edges.push(<path key={i} d={d} className="edge" />);
+    let cls = "edge";
+    if (a.ol && b.ol) cls += " oracle";
+    else if (a.nw && b.nw) cls += " v05new";
+    else if (a.ch && b.ch) cls += " v05changed";
+    edges.push(<path key={i} d={d} className={cls} />);
   }
 
+  const rings: React.JSX.Element[] = [];
   const fallbacks: React.JSX.Element[] = [];
   const frames: React.JSX.Element[] = [];
   const icons: React.JSX.Element[] = [];
@@ -207,7 +212,7 @@ const TreeStatic = memo(function TreeStatic({
             key={`fb-${idStr}`}
             cx={n.x}
             cy={n.y}
-            r={fw * 0.32}
+            r={fw * 0.45}
             className="fb-classstart"
           />,
         );
@@ -225,6 +230,14 @@ const TreeStatic = memo(function TreeStatic({
             height={ih}
           />,
         );
+      }
+      const ringR = Math.max(fw, fh) * 0.6;
+      if (n.ol) {
+        rings.push(<circle key={`ro-${idStr}`} cx={n.x} cy={n.y} r={ringR} stroke="#7ad8ff" strokeWidth={9} className="ring" />);
+      } else if (n.nw) {
+        rings.push(<circle key={`rn-${idStr}`} cx={n.x} cy={n.y} r={ringR} stroke="#ff7adb" strokeWidth={9} className="ring" />);
+      } else if (n.ch) {
+        rings.push(<circle key={`rc-${idStr}`} cx={n.x} cy={n.y} r={ringR} stroke="#a8e84a" strokeWidth={9} className="ring" />);
       }
     }
   }
@@ -256,6 +269,7 @@ const TreeStatic = memo(function TreeStatic({
   return (
     <>
       <g>{edges}</g>
+      <g>{rings}</g>
       <g>{fallbacks}</g>
       <g>{frames}</g>
       <g>{icons}</g>
@@ -389,22 +403,38 @@ function HoverRing({
   ascendancyId: string | null;
 }) {
   const hovered = useStore((s) => s.hovered);
+  const iconIdMap = useMemo(() => makeIconIdMap(tree), [tree]);
   if (hovered == null) return null;
   const n = tree.nodes[String(hovered)];
   if (!n || n.x == null || n.y == null) return null;
   if ((n.asc ?? null) !== ascendancyId) return null;
-  const [fw, fh] = renderSizeFor(n, tree.atlas.frames.frames);
-  const r = Math.max(fw, fh) * 1.5;
+  const frameIndex = tree.atlas.frames.frames;
+  const iconIndex = tree.atlas.skills.icons;
+  const [fw, fh] = renderSizeFor(n, frameIndex);
+  const fn = frameNameFor(n, "unallocated");
+  const iconSid = n.icon && iconIndex[n.icon] ? iconIdMap.get(n.icon) : null;
+  const [iw, ih] = iconSizeFor(n, fw, fh);
   return (
-    <circle
-      cx={n.x}
-      cy={n.y}
-      r={r}
-      fill="rgba(255,0,0,0.35)"
-      stroke="#ff2a2a"
-      strokeWidth={12}
-      pointerEvents="none"
-    />
+    <g className="glow" pointerEvents="none">
+      {fn && frameIndex[fn] && (
+        <use
+          href={`#f-${fn}`}
+          x={n.x - fw / 2}
+          y={n.y - fh / 2}
+          width={fw}
+          height={fh}
+        />
+      )}
+      {iconSid && (
+        <use
+          href={`#${iconSid}`}
+          x={n.x - iw / 2}
+          y={n.y - ih / 2}
+          width={iw}
+          height={ih}
+        />
+      )}
+    </g>
   );
 }
 
