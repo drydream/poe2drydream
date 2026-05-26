@@ -19,6 +19,11 @@ const STEPS = [
     title: "Allocate Ascendancy",
     body: "Allocate the ascendancy start node first, then path outward through ascendancy passives.",
   },
+  {
+    n: 5,
+    title: "Skip Mastery Nodes",
+    body: "Don't pick mastery nodes — they're a bug and shouldn't appear in the tree.",
+  },
 ];
 
 export function Guide() {
