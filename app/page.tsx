@@ -30,10 +30,98 @@ function HoverDebug() {
   );
 }
 
+const DEST = "https://natwarth.github.io/poe2-skilltree/";
+function destUrl() {
+  return DEST + window.location.hash;
+}
+
+function Redirect({ onDismiss }: { onDismiss: () => void }) {
+  const [seconds, setSeconds] = useState(5);
+
+  useEffect(() => {
+    if (seconds <= 0) {
+      window.location.href = destUrl();
+      return;
+    }
+    const t = setTimeout(() => setSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [seconds]);
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 999,
+        background: "rgba(0,0,0,0.88)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 20,
+        color: "#ffd98a",
+        fontFamily: "Georgia, serif",
+        textAlign: "center",
+        padding: 32,
+      }}
+    >
+      <div style={{ fontSize: 28, fontWeight: "bold" }}>
+        A better version exists
+      </div>
+      <div style={{ fontSize: 16, color: "#c8aa6e", maxWidth: 480 }}>
+        natwarth&apos;s PoE2 Skill Tree Planner has more features, better
+        performance, and full support for all classes and ascendancies. You are
+        being redirected there now.
+      </div>
+      <div style={{ fontSize: 64, fontWeight: "bold", color: "#e8d06e" }}>
+        {seconds}
+      </div>
+      <div style={{ fontSize: 13, color: "#888" }}>
+        Redirecting to{" "}
+        <a
+          href="https://natwarth.github.io/poe2-skilltree/"
+          style={{ color: "#ffd98a" }}
+        >
+          natwarth.github.io/poe2-skilltree/
+        </a>
+      </div>
+      <button
+        onClick={() => (window.location.href = destUrl())}
+        style={{
+          marginTop: 8,
+          padding: "10px 24px",
+          background: "#8a6a2a",
+          border: "1px solid #ffd98a",
+          color: "#ffd98a",
+          cursor: "pointer",
+          fontSize: 14,
+          fontFamily: "inherit",
+        }}
+      >
+        Go now
+      </button>
+      <button
+        onClick={onDismiss}
+        style={{
+          background: "none",
+          border: "none",
+          color: "#666",
+          cursor: "pointer",
+          fontSize: 12,
+          textDecoration: "underline",
+        }}
+      >
+        Stay on this page anyway
+      </button>
+    </div>
+  );
+}
+
 export default function Page() {
   const initialized = useRef(false);
   const hashSyncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showRedirect, setShowRedirect] = useState(true);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -84,6 +172,7 @@ export default function Page() {
           <div className="dot" />
         </div>
       )}
+      {showRedirect && <Redirect onDismiss={() => setShowRedirect(false)} />}
     </main>
   );
 }
